@@ -1,0 +1,13 @@
+---
+- hosts: all
+  tasks:
+    - name: Check /etc/hosts
+      shell: grep -c "^## End API  FPLAY" /etc/hosts || true
+      register: test_grep  
+    - name: add hosts
+      lineinfile:
+          path: /etc/hosts
+          insertbefore: '## End API  FPLAY'
+          line: '118.69.184.28 promotion.fptplay.net'
+          state: present
+      when: test_grep.stdout == "1" 
